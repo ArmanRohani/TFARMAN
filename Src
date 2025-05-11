@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tradefolio | Algorithmic Trading Simplified</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Global Variables - Light Theme */
+        :root {
+            --primary-accent: #007BFF; /* Vibrant Blue */
+            --secondary-accent: #28A745; /* Bright Green */
+            
+            --bg-main: #FFFFFF;
+            --bg-alt: #F8FAFC; /* Slightly off-white for sections/cards */
+            --bg-subtle-accent: #E7F3FF; /* Very light blue for subtle backgrounds */
+
+            --text-primary: #1E293B; /* Dark Slate Gray for main text */
+            --text-secondary: #64748B; /* Lighter Slate Gray for secondary text */
+            --text-on-accent: #FFFFFF; /* White text for use on accent backgrounds */
+
+            --border-color: #E2E8F0; /* Light Gray for borders */
+            --border-color-strong: #CBD5E1;
+
+            --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+            --shadow-sm: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.07);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.07);
+            
+            --header-height: 70px; 
+        }
+        
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body.mobile-menu-open {
+            overflow: hidden;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--primary-accent);
+            transition: color 0.2s ease;
+        }
+        a:hover {
+            color: #0056b3; /* Darker shade of primary accent */
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.75rem); 
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+        
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+        
+        h3 {
+            font-size: clamp(1.3rem, 3vw, 1.75rem);
+            font-weight: 600;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Layout */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem; 
+            position: relative;
+        }
+        
+        section {
+            padding: 5rem 0; 
+            position: relative;
+            overflow: hidden; 
+        }
+
+        section:nth-of-type(even) { 
+            background-color: var(--bg-alt);
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.85);
+            z-index: 1000;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
+            border-bottom: 1px solid transparent; 
+        }
+        
+        header.scrolled {
+            background-color: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(8px);
+            box-shadow: var(--shadow-md);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .logo { display: flex; align-items: center; }
+        
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-links { display: flex; gap: 2.2rem; align-items: center; }
+        
+        .nav-link {
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 0.5rem 0.25rem;
+            color: var(--text-primary);
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active { color: var(--primary-accent); }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        
+        /* General CTA Button Style */
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary-accent), #0056b3); 
+            color: var(--text-on-accent);
+            padding: 0.65rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            box-shadow: var(--shadow-sm); 
+            position: relative; 
+            z-index: 1;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: var(--shadow-md); 
+        }
+        
+        /* Style for a .cta-button that should be white */
+        .cta-button.white {
+            background-image: none; 
+            background-color: var(--bg-main); 
+            color: var(--primary-accent);    
+            border: 1px solid var(--border-color); 
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .cta-button.white:hover {
+            background-color: var(--bg-alt);
+            color: #0056b3; 
+            border-color: var(--border-color-strong);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Mobile menu */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 28px;
+            height: 22px;
+            cursor: pointer;
+            z-index: 1001;
+            background: none;
+            border: none;
+        }
+        
+        .mobile-menu-toggle span {
+            display: block;
+            height: 2.5px; 
+            width: 100%;
+            background-color: var(--text-primary);
+            border-radius: 3px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) { transform: translateY(9.75px) rotate(45deg); }
+        .mobile-menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .mobile-menu-toggle.active span:nth-child(3) { transform: translateY(-9.75px) rotate(-45deg); }
+        
+        /* Hero Section */
+        .hero {
+            min-height: calc(100vh - var(--header-height)); 
+            display: flex;
+            align-items: center;
+            padding-top: calc(var(--header-height) + 2rem); 
+            padding-bottom: 4rem;
+            background: linear-gradient(180deg, var(--bg-main) 70%, var(--bg-subtle-accent) 100%);
+        }
+
+        .hero > .container { 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3rem;
+        }
+        
+        .hero-content {
+            flex: 1 1 45%; 
+            max-width: 550px;
+            z-index: 2;
+        }
+        
+        .hero-title { margin-bottom: 1.25rem; }
+        
+        .hero-description {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 95%;
+        }
+        
+        .hero-buttons { display: flex; gap: 1rem; }
+        
+        .secondary-button {
+            background-color: transparent;
+            color: var(--primary-accent);
+            border: 1.5px solid var(--primary-accent);
+            padding: 0.65rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .secondary-button:hover {
+            background-color: var(--bg-subtle-accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Platform Preview - Enhanced */
+        .platform-preview {
+            flex: 1 1 55%;
+            position: relative; 
+            max-width: 680px; 
+        }
+        
+        .preview-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px; 
+            box-shadow: var(--shadow-xl);
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+        }
+        
+        .dashboard-mockup { 
+            min-height: 420px; 
+            background-color: #F8FAFC; 
+            border: 1px solid var(--border-color); 
+            display: flex;
+            flex-direction: column;
+        }
+        .mockup-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 0.75rem 1.25rem; 
+            background-color: var(--bg-main); 
+            border-bottom: 1px solid var(--border-color); 
+            flex-shrink: 0;
+        }
+        .mockup-tabs { display: flex; gap: 1rem; } 
+        .mockup-tab { 
+            padding: 0.5rem 1rem; 
+            border-radius: 6px; 
+            font-size: 0.85rem; 
+            color: var(--text-secondary); 
+            font-weight: 500;
+        }
+        .mockup-tab.active { 
+            background-color: var(--bg-subtle-accent); 
+            color: var(--primary-accent); 
+            font-weight: 600; 
+        }
+        .mockup-actions { display: flex; gap: 0.5rem; } 
+        .mockup-action { 
+            width: 12px; height: 12px; 
+            border-radius: 50%; 
+            background-color: #D1D5DB; 
+        }
+        .mockup-content { display: flex; flex-grow: 1; } 
+        
+        .mockup-sidebar { 
+            width: 60px; 
+            background-color: #0A2540;  
+            height: 100%; 
+            padding: 1rem 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 1rem; 
+            flex-shrink: 0;
+        }
+        .mockup-menu-item { 
+            width: 36px; height: 36px; 
+            border-radius: 8px; 
+            background-color: transparent; 
+            color: rgba(255, 255, 255, 0.6); 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem; 
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .mockup-menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .mockup-menu-item.active { 
+            background-color: #FFD700; 
+            color: #0A2540; 
+        }
+        
+        .mockup-main { 
+            flex: 1; 
+            padding: 1.25rem; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1.25rem; 
+            background-color: #F9FAFB; 
+        }
+        
+        .mockup-chart-container {
+            background-color: var(--bg-main);
+            border-radius: 10px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+        .mockup-chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .mockup-chart-header h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        .chart-timeframe {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background-color: var(--bg-alt);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .mockup-chart {
+            height: 150px; 
+            background: linear-gradient(180deg, rgba(0, 123, 255, 0.05) 0%, rgba(0, 123, 255, 0.01) 100%); 
+            border-radius: 8px; 
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid var(--border-color); 
+        }
+        
+        .mockup-chart::before { 
+            content: '';
+            position: absolute;
+            height: 60px; 
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, 
+                rgba(40, 167, 69, 0.5) 0%, 
+                rgba(40, 167, 69, 0.3) 30%,
+                rgba(0, 123, 255, 0.3) 70%, 
+                rgba(0, 123, 255, 0.5) 100%);
+            clip-path: polygon(0 100%, 0 55%, 5% 40%, 10% 60%, 15% 45%, 20% 55%, 25% 25%, 30% 40%, 
+                              35% 30%, 40% 45%, 45% 35%, 50% 50%, 55% 70%, 60% 55%, 65% 80%, 
+                              70% 45%, 75% 60%, 80% 40%, 85% 50%, 90% 30%, 95% 45%, 100% 25%, 100% 100%);
+            animation: pulseGradient 4s ease-in-out infinite;
+        }
+        
+        .mockup-widgets { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 1rem; 
+        }
+        .mockup-widget { 
+            background-color: var(--bg-main); 
+            border-radius: 8px; 
+            box-shadow: var(--shadow-sm); 
+            border: 1px solid var(--border-color);
+            padding: 0.9rem; 
+            text-align: center; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90px; 
+        }
+        .widget-icon-top {
+            font-size: 1.2rem;
+            color: var(--primary-accent);
+            margin-bottom: 0.5rem;
+        }
+        .widget-title {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        .widget-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .widget-value.positive-value {
+            color: var(--secondary-accent);
+        }
+        
+        /* Features Section */
+        .section-header { text-align: center; max-width: 750px; margin: 0 auto 4rem; }
+        .section-title { margin-bottom: 1rem; }
+        .section-description { font-size: 1.1rem; color: var(--text-secondary); }
+        
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.8rem; }
+        
+        .feature-card {
+            background-color: var(--bg-main);
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            transition: all 0.3s ease-out;
+            height: 100%;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-accent);
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--bg-subtle-accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            color: var(--primary-accent);
+            font-size: 1.5rem;
+            transition: all 0.3s ease-out;
+        }
+        .feature-card:hover .feature-icon {
+            background-color: var(--primary-accent);
+            color: var(--text-on-accent);
+            transform: scale(1.1) rotate(-10deg);
+        }
+        
+        .feature-title { font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--text-primary); }
+        .feature-description { color: var(--text-secondary); font-size: 0.95rem; }
+        
+        /* Algo Engine Section - ANIMATED VISUAL STYLES */
+        .algo-engine-section {
+            background-color: var(--bg-main); 
+        }
+        .algo-engine-container {
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            gap: 2rem; 
+        }
+        .algo-engine-content {
+            flex: 1;
+            max-width: 600px; 
+            text-align: center; 
+        }
+        .algo-engine-content h3 {
+            margin-bottom: 0.75rem;
+        }
+        .algo-engine-content ul {
+            list-style: none;
+            padding-left: 0;
+            text-align: left; 
+            max-width: 500px; 
+            margin: 1.5rem auto; 
+        }
+        .algo-engine-content li {
+            display: flex;
+            align-items: flex-start; 
+            gap: 10px; 
+            margin-bottom: 0.75rem; 
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+        .algo-engine-content li i {
+            color: var(--secondary-accent);
+            margin-top: 4px; 
+            font-size: 0.9rem; 
+        }
+
+        .algo-engine-visual-animated { 
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px; 
+            background: linear-gradient(145deg, var(--bg-subtle-accent) 30%, #e0eaff 100%);
+            border-radius: 16px; 
+            padding: 2.5rem; 
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 550px; 
+            position: relative;
+            overflow: hidden; 
+        }
+        
+        /* Background patterns for the animated visual */
+        .algo-engine-visual-animated::before,
+        .algo-engine-visual-animated::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.05;
+            z-index: 0;
+            pointer-events: none; 
+        }
+        .algo-engine-visual-animated::before { 
+            width: 300px;
+            height: 300px;
+            background-color: var(--primary-accent);
+            top: -100px;
+            left: -100px;
+            animation: subtlePulse 8s infinite ease-in-out;
+        }
+        .algo-engine-visual-animated::after { 
+            width: 200px;
+            height: 200px;
+            background-color: var(--secondary-accent);
+            bottom: -80px;
+            right: -80px;
+            animation: subtlePulse 10s infinite ease-in-out reverse;
+        }
+
+
+        .animated-core {
+            width: 65px; 
+            height: 65px;
+            background: linear-gradient(135deg, var(--primary-accent), #0056b3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.6rem; 
+            box-shadow: 0 0 20px rgba(0,123,255,0.5);
+            position: absolute; 
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8); 
+            z-index: 10;
+            opacity: 0; 
+            animation: popInNode 0.3s 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Quicker pop */
+        }
+
+        .animated-node {
+            background-color: white;
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px; 
+            font-size: 0.8rem; 
+            font-weight: 500;
+            box-shadow: var(--shadow-md);
+            position: absolute;
+            z-index: 5;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            opacity: 0; 
+            transform: scale(0.7); 
+            transition: transform 0.3s ease;
+        }
+        .animated-node:hover {
+            transform: scale(1.05) !important; /* Ensure hover scale overrides animation transform */
+        }
+        .animated-node i {
+            color: var(--primary-accent);
+            font-size: 0.7rem;
+        }
+        
+        .node-rsi { top: 25%; left: 15%; animation: popInNode 0.25s 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .node-pe { top: 50%; left: 5%;  animation: popInNode 0.25s 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .node-macd { top: 35%; right: 10%; animation: popInNode 0.25s 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        
+        .animated-connector-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .animated-connector-svg line {
+            stroke: var(--primary-accent);
+            stroke-width: 2;
+            stroke-dasharray: 3 3; /* Adjusted dash array for better look */
+            stroke-linecap: round;
+            opacity: 0;
+            /* Animation will be controlled by JS for drawing effect */
+        }
+        .connector-svg-output line { stroke: var(--secondary-accent); }
+
+
+        .execute-trade-btn-animated {
+            background-color: var(--secondary-accent);
+            color: white;
+            border: 2px solid white;
+            padding: 0.6rem 1.2rem; 
+            border-radius: 30px;
+            font-size: 0.85rem; 
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(40,167,69,0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: absolute;
+            bottom: 15%; 
+            left: 50%;
+            transform: translateX(-50%) scale(0.7);
+            opacity: 0;
+            animation: popInNode 0.3s 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* Quicker pop */
+            z-index: 10;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .execute-trade-btn-animated:hover {
+            background-color: #1e7e34; 
+            transform: translateX(-50%) scale(1.05);
+        }
+        .execute-trade-btn-animated i { font-size: 0.8rem; }
+
+        .backtest-results-popup {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(248, 250, 252, 0.97); 
+            backdrop-filter: blur(4px);
+            z-index: 20;
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border-radius: 16px; 
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .backtest-results-popup.visible { 
+            display: flex; 
+            opacity: 1;
+            transform: scale(1);
+        }
+        .backtest-results-popup h4 {
+            color: var(--primary-accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        .result-metric {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        .result-metric span {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .result-metric .positive { color: var(--secondary-accent); }
+        .result-metric .negative { color: #DC3545; }
+
+        .close-results-btn {
+            margin-top: 1.5rem;
+            padding: 0.5rem 1rem;
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { transform: scale(1); opacity: 0.05; }
+            50% { transform: scale(1.1); opacity: 0.08; }
+        }
+        @keyframes popInNode {
+            to { opacity: 1; transform: scale(1) translateX(0) translateY(0) translateX(-50%); /* Centering for absolute positioned execute button */ }
+        }
+        /* Specific centering for the core, which is already centered via translate */
+        .animated-core.popInNode-active { /* Class to be added by JS */
+             animation: popInCoreAnimation 0.3s 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popInCoreAnimation {
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Animation for SVG lines */
+        @keyframes drawSvgLineKeyframe {
+          from { stroke-dashoffset: 200; opacity: 0;} 
+          to { stroke-dashoffset: 0; opacity: 0.7;}
+        }
+        .line-draw-animation {
+            animation-name: drawSvgLineKeyframe;
+            animation-duration: 0.4s; /* Quicker line draw */
+            animation-fill-mode: forwards;
+            animation-timing-function: ease-out;
+        }
+
+
+        @media (min-width: 992px) { 
+            .algo-engine-container {
+                flex-direction: row;
+                gap: 3rem; 
+                align-items: center; 
+            }
+             .algo-engine-content {
+                text-align: left; 
+                max-width: 500px; 
+            }
+            .algo-engine-content ul {
+                margin: 1.5rem 0; 
+            }
+            .algo-engine-visual-animated { 
+                min-height: 380px; 
+                max-width: none; 
+            }
+        }
+
+
+        /* Marketplace Section */
+        .algo-carousel { position: relative; margin-top: 2.5rem; padding: 0 45px; }
+        .algo-carousel-inner { overflow: hidden; position: relative; }
+        .algo-carousel-track { display: flex; transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .algo-carousel-slide { 
+            flex: 0 0 auto; 
+            padding: 10px 12px 0 12px; 
+            width: 33.333%; 
+        }
+        
+        .algo-carousel-nav { display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; }
+        .algo-carousel-dots { display: flex; gap: 0.6rem; align-items: center; }
+        
+        .algo-carousel-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--border-color-strong);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .algo-carousel-dot.active {
+            background-color: var(--primary-accent);
+            transform: scale(1.25);
+        }
+        
+        .algo-carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px; height: 44px;
+            background-color: var(--bg-main);
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 10;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+        
+        .algo-carousel-button:hover {
+            background-color: var(--primary-accent);
+            color: var(--text-on-accent);
+            border-color: var(--primary-accent);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-50%) scale(1.08);
+        }
+        
+        .algo-carousel-button.prev { left: 0px; }
+        .algo-carousel-button.next { right: 0px; }
+        
+        /* Algorithm Cards - Light Theme */
+        .algo-card {
+            background-color: var(--bg-main);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            display: flex; flex-direction: column; height: 100%;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease-out;
+        }
+
+        .algo-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-accent);
+        }
+        
+        .algo-header {
+            background-color: var(--bg-alt); 
+            padding: 18px;
+            color: var(--text-primary);
+            position: relative;
+            display: flex; justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .win-rate-container { flex: 1; }
+        .win-rate-label { font-size: 0.85rem; margin-bottom: 3px; color: var(--text-secondary); }
+        .win-rate { font-size: 1.8rem; font-weight: 700; line-height: 1; margin-bottom: 3px; color: var(--primary-accent); }
+        .percentage { font-size: 1.2rem; }
+        .profit-loss { font-size: 1rem; font-weight: 600; }
+        .profit-loss.positive { color: var(--secondary-accent); }
+        .profit-loss.negative { color: #DC3545; } 
+        
+        .algo-badges { display: flex; gap: 8px; align-items: flex-start; }
+        
+        .published-badge {
+            background-color: var(--primary-accent);
+            color: var(--text-on-accent);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .favorite-icon {
+            font-size: 1.25rem; cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+            color: var(--text-secondary);
+        }
+        .favorite-icon:hover { color: var(--secondary-accent); transform: scale(1.15); }
+        .favorite-icon.favorited { color: var(--secondary-accent); }
+        
+        .algo-content { padding: 18px; flex-grow: 1; }
+        
+        .algo-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
+        .algo-description { font-size: 0.9rem; margin-bottom: 15px; color: var(--text-secondary); }
+        .read-more { color: var(--primary-accent); margin-left: 3px; text-decoration: none; font-weight: 500; font-size: 0.9rem; }
+        .read-more:hover { text-decoration: underline; }
+        
+        .algo-owner { display: flex; align-items: center; gap: 12px; }
+        
+        .owner-avatar {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+            color: var(--text-on-accent);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; font-weight: 500;
+        }
+        
+        .owner-info { display: flex; flex-direction: column; }
+        .algo-date { font-size: 0.85rem; color: var(--text-secondary); }
+        .owner-name { font-size: 0.9rem; color: var(--text-primary); }
+        
+        .algo-footer {
+            padding: 12px 18px;
+            background-color: var(--bg-alt);
+            display: flex; justify-content: space-between; align-items: center;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .subscribed-btn, .rent-btn {
+            color: var(--text-on-accent);
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: none; font-weight: 500; font-size: 0.85rem;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .subscribed-btn { background-color: var(--text-secondary); }
+        .subscribed-btn:hover { background-color: #505A67; }
+        .rent-btn { background: linear-gradient(135deg, var(--primary-accent), #0056b3); }
+        .rent-btn:hover { opacity: 0.9; transform: scale(1.03); }
+        
+        .action-btn { 
+            width: 34px; height: 34px; border-radius: 50%;
+            background-color: var(--primary-accent); color: var(--text-on-accent);
+            border: none; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s ease; font-size: 1rem;
+        }
+        .action-btn:hover { background-color: var(--secondary-accent); transform: rotate(90deg) scale(1.05); }
+        
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, #0062CC 0%, #1F7736 100%); 
+            padding: 5rem 0;
+            color: var(--text-on-accent); 
+            text-align: center;
+            position: relative; 
+        }
+
+        .cta-title {
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            margin-bottom: 1rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 700;
+            color: var(--text-on-accent); 
+            text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4), 0px 1px 3px rgba(0, 0, 0, 0.3);
+            position: relative; 
+            z-index: 1;
+        }
+
+        .cta-description {
+            font-size: 1.15rem;
+            margin-bottom: 2.5rem;
+            opacity: 1; 
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--text-on-accent); 
+            text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.35), 0px 1px 2px rgba(0,0,0,0.25);
+            position: relative; 
+            z-index: 1;
+        }
+
+        /* Specific style for .cta-button.white INSIDE .cta section */
+        .cta .cta-button.white {
+            background-image: linear-gradient(135deg, var(--primary-accent), #0056b3); 
+            background-color: transparent; 
+            color: var(--text-on-accent);    
+            border: none;                    
+        }
+
+        .cta .cta-button.white:hover {
+            background-image: linear-gradient(135deg, #0069D9, #004085); 
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--bg-alt);
+            color: var(--text-primary);
+            padding: 4rem 0 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 2.5rem; margin-bottom: 2.5rem;
+        }
+        
+        .footer-logo { 
+            font-size: 1.6rem; font-weight: 800; margin-bottom: 1rem; display: inline-block;
+        }
+        
+        .footer-description { color: var(--text-secondary); margin-bottom: 1.5rem; max-width: 90%; font-size: 0.95rem;}
+        .social-links { display: flex; gap: 0.8rem; }
+        
+        .social-link {
+            width: 38px; height: 38px; border-radius: 50%;
+            background-color: var(--bg-main);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background-color: var(--primary-accent);
+            color: var(--text-on-accent);
+            border-color: var(--primary-accent);
+            transform: translateY(-2px) scale(1.05);
+        }
+        
+        .footer-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary); }
+        .footer-links { list-style: none; }
+        .footer-link { margin-bottom: 0.6rem; }
+        .footer-link a { color: var(--text-secondary); font-size: 0.95rem; transition: all 0.2s ease; }
+        .footer-link a:hover { color: var(--primary-accent); padding-left: 0.3rem; }
+        
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem; text-align: center;
+            color: var(--text-secondary); font-size: 0.9rem;
+        }
+        
+        /* Animation Classes & Keyframes */
+        .float-animation { animation: float 7s ease-in-out infinite; }
+        .pulse-animation { animation: pulse 2s infinite; }
+        
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .reveal-on-scroll.animate-in-view { opacity: 1; transform: translateY(0); }
+        .feature-card.reveal-on-scroll:nth-child(2), .footer-grid > div.reveal-on-scroll:nth-child(2) { transition-delay: 0.1s; }
+        .feature-card.reveal-on-scroll:nth-child(3), .footer-grid > div.reveal-on-scroll:nth-child(3) { transition-delay: 0.2s; }
+        .feature-card.reveal-on-scroll:nth-child(4), .footer-grid > div.reveal-on-scroll:nth-child(4) { transition-delay: 0.05s; }
+        .feature-card.reveal-on-scroll:nth-child(5) { transition-delay: 0.15s; }
+        .feature-card.reveal-on-scroll:nth-child(6) { transition-delay: 0.25s; }
+
+
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-18px); } 100% { transform: translateY(0); } }
+        
+        @keyframes pulse { 
+            0% { box-shadow: var(--shadow-sm), 0 0 0 0 rgba(0, 123, 255, 0.4); }
+            70% { box-shadow: var(--shadow-sm), 0 0 0 12px rgba(0, 123, 255, 0); }
+            100% { box-shadow: var(--shadow-sm), 0 0 0 0 rgba(0, 123, 255, 0); }
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) { 
+            .hero > .container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero-content {
+                flex-basis: auto; 
+                max-width: 650px; 
+                margin-bottom: 3rem;
+            }
+            .hero-description { margin-left: auto; margin-right: auto; }
+            .hero-buttons { justify-content: center; }
+            .platform-preview {
+                flex-basis: auto; 
+                width: 100%; 
+                max-width: 600px; 
+                margin-left: 0;
+            }
+            .dashboard-mockup { height: auto; min-height: 380px; }
+            .features-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+            .algo-carousel-slide { width: 50%; padding: 10px 12px 0 12px; } 
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem 1.5rem; }
+            .algo-engine-container { flex-direction: column; align-items: center; } 
+            .algo-engine-content { text-align: center; }
+            .algo-engine-content ul { margin: 1.5rem auto; }
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: clamp(2rem, 7vw, 2.8rem); }
+            h2 { font-size: clamp(1.7rem, 6vw, 2.3rem); }
+
+            .nav-links {
+                position: fixed; top: var(--header-height); 
+                right: -100%; width: min(80vw, 320px); height: calc(100vh - var(--header-height));
+                background-color: var(--bg-main);
+                flex-direction: column; align-items: flex-start; justify-content: flex-start;
+                gap: 0; padding: 2rem 1.5rem;
+                transition: right 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+                box-shadow: -3px 0 10px rgba(0,0,0,0.05);
+                border-left: 1px solid var(--border-color);
+                z-index: 999;
+            }
+            .nav-links.open { right: 0; }
+            .nav-link { font-size: 1.1rem; padding: 0.8rem 0; width: 100%; }
+            .nav-link::after { bottom: 0.3rem; }
+            
+            .header .cta-button.desktop-only-cta { display: none; }
+            .nav-links .mobile-only-cta { display: block !important; margin-top:1.5rem; width: 100%; text-align: center;}
+
+
+            .mobile-menu-toggle { display: flex; }
+            .features-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+            .footer-grid { grid-template-columns: 1fr; text-align: left; } 
+            .social-links { justify-content: flex-start; }
+
+            .algo-carousel-slide { width: 100%; padding: 10px 5px 0 5px; } 
+            .algo-carousel { padding: 0 10px; }
+            .algo-carousel-button { width: 38px; height: 38px; font-size: 0.8rem; }
+            .algo-carousel-button.prev { left: -5px; }
+            .algo-carousel-button.next { right: -5px; }
+
+            .mockup-widgets { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); } 
+            .mockup-chart-header { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+
+            .algo-engine-visual-animated { min-height: 320px; padding: 1.5rem; } 
+            .animated-core { width: 60px; height: 60px; font-size: 1.5rem; margin-bottom: 2rem;}
+            .animated-node { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+            .node-rsi { top: 15% !important; left: 10% !important; }
+            .node-pe { top: 45% !important; left: 2% !important;  }
+            .node-macd { top: 25% !important; right: 5% !important; }
+            .execute-trade-btn-animated { bottom: 10%;}
+            .animated-connector-svg line { stroke-width: 1.5px; stroke-dasharray: 2 2;}
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <div class="logo-text">TRADEFOLIO</div>
+            </a>
+            <nav class="nav-links" id="navLinks">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#algo-engine" class="nav-link">Algo Engine</a>
+                <a href="#marketplace" class="nav-link">Marketplace</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#login" class="nav-link">Login</a>
+                <button class="cta-button mobile-only-cta" style="display:none;">Get Started</button>
+            </nav>
+            <button class="cta-button desktop-only-cta">Get Started</button>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content reveal-on-scroll">
+                <h1 class="hero-title">Build Trading Algorithms <span class="text-gradient">Without Code</span></h1>
+                <p class="hero-description">Tradefolio empowers investors to create, test, and deploy sophisticated trading algorithms through an intuitive drag-and-drop interface.</p>
+                <div class="hero-buttons">
+                    <button class="cta-button pulse-animation">Start Building</button>
+                    <button class="secondary-button">Watch Demo</button>
+                </div>
+            </div>
+            
+            <div class="platform-preview float-animation reveal-on-scroll" style="transition-delay: 0.15s;">
+                <div class="preview-container dashboard-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-tabs">
+                            <div class="mockup-tab active">Dashboard</div>
+                            <div class="mockup-tab">Strategy Builder</div>
+                            <div class="mockup-tab">Backtesting</div>
+                        </div>
+                        <div class="mockup-actions">
+                            <div class="mockup-action"></div>
+                            <div class="mockup-action"></div>
+                            <div class="mockup-action"></div>
+                        </div>
+                    </div>
+                    <div class="mockup-content">
+                        <div class="mockup-sidebar">
+                            <div class="mockup-menu-item active" title="Dashboard"><i class="fas fa-home"></i></div>
+                            <div class="mockup-menu-item" title="Analytics"><i class="fas fa-chart-pie"></i></div>
+                            <div class="mockup-menu-item" title="Strategies"><i class="fas fa-stream"></i></div>
+                            <div class="mockup-menu-item" title="Settings"><i class="fas fa-cogs"></i></div>
+                            <div class="mockup-menu-item" title="Profile"><i class="fas fa-user-circle"></i></div>
+                        </div>
+                        <div class="mockup-main">
+                            <div class="mockup-chart-container">
+                                <div class="mockup-chart-header">
+                                    <h4>Portfolio Performance</h4>
+                                    <span class="chart-timeframe">Last 30 Days</span>
+                                </div>
+                                <div class="mockup-chart">
+                                    <!-- Graph is generated by ::before pseudo-element -->
+                                </div>
+                            </div>
+                            <div class="mockup-widgets">
+                                <div class="mockup-widget">
+                                    <div class="widget-icon-top"><i class="fas fa-wallet"></i></div>
+                                    <div class="widget-title">Account Value</div>
+                                    <div class="widget-value">$12,345</div>
+                                </div>
+                                <div class="mockup-widget">
+                                    <div class="widget-icon-top"><i class="fas fa-chart-line"></i></div>
+                                    <div class="widget-title">Daily P&L</div>
+                                    <div class="widget-value positive-value">+$250</div>
+                                </div>
+                                <div class="mockup-widget">
+                                    <div class="widget-icon-top"><i class="fas fa-percentage"></i></div>
+                                    <div class="widget-title">Win Rate</div>
+                                    <div class="widget-value">68%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header reveal-on-scroll">
+                <h2 class="section-title">Powerful Features for <span class="text-gradient">Every Trader</span></h2>
+                <p class="section-description">Whether you're a beginner or an experienced trader, Tradefolio gives you the tools to succeed in the markets.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card reveal-on-scroll">
+                    <div class="feature-icon"><i class="fas fa-puzzle-piece"></i></div>
+                    <h3 class="feature-title">Drag & Drop Strategy Builder</h3>
+                    <p class="feature-description">Create complex trading algorithms by simply dragging and connecting components - no coding required.</p>
+                </div>
+                
+                <div class="feature-card reveal-on-scroll">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="feature-title">Comprehensive Backtesting</h3>
+                    <p class="feature-description">Test your strategies against historical market data to see how they would have performed and refine your approach.</p>
+                </div>
+                
+                <div class="feature-card reveal-on-scroll">
+                    <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                    <h3 class="feature-title">Automated Trading</h3>
+                    <p class="feature-description">Deploy your strategies to trade automatically based on your defined criteria with custom risk limits.</p>
+                </div>
+                
+                <div class="feature-card reveal-on-scroll">
+                    <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+                    <h3 class="feature-title">Real-Time Market Data</h3>
+                    <p class="feature-description">Access real-time price feeds, financial data, and news to make informed decisions from leading providers.</p>
+                </div>
+                
+                <div class="feature-card reveal-on-scroll">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="feature-title">Risk Management Tools</h3>
+                    <p class="feature-description">Implement stop-losses, position sizing, and portfolio diversification rules to protect your capital.</p>
+                </div>
+                
+                <div class="feature-card reveal-on-scroll">
+                    <div class="feature-icon"><i class="fas fa-users"></i></div>
+                    <h3 class="feature-title">Strategy Marketplace</h3>
+                    <p class="feature-description">Discover, learn from, or share & monetize your trading strategies in our vibrant community marketplace.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Algo Engine Section - ANIMATED VISUAL -->
+    <section class="algo-engine-section" id="algo-engine">
+        <div class="container">
+            <div class="section-header reveal-on-scroll">
+                <h2 class="section-title">Craft Your Edge with the <span class="text-gradient">Algo Engine</span></h2>
+                <p class="section-description">Our intuitive visual builder makes complex strategy creation simple and accessible. No code, all power. <br><strong>Click "Execute Trade" below to see simulated results!</strong></p>
+            </div>
+            <div class="algo-engine-container reveal-on-scroll" style="transition-delay: 0.15s;">
+                <div class="algo-engine-content">
+                    <h3>Design, Test, & Deploy with Ease</h3>
+                    <p>The Tradefolio Algo Engine is your canvas for innovation. Seamlessly:</p>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i>Choose from a rich library of technical & fundamental indicators.</li>
+                        <li><i class="fas fa-check-circle"></i>Define precise buy/sell criteria with logical operators.</li>
+                        <li><i class="fas fa-check-circle"></i>Instantly backtest and refine your custom algorithms.</li>
+                        <li><i class="fas fa-check-circle"></i>Deploy with confidence and automate your trading.</li>
+                    </ul>
+                    <p style="margin-top: 1.5rem;">Transform your trading ideas into automated success stories.</p>
+                </div>
+                <div class="algo-engine-visual-animated" id="algoEngineAnimatedVisual"> 
+                    <svg class="animated-connector-svg" id="connectorSvgContainer" width="100%" height="100%">
+                        <!-- Lines will be appended here by JavaScript -->
+                    </svg>
+                    <div class="animated-core" id="animatedCore"><i class="fas fa-cogs"></i></div>
+                    
+                    <div class="animated-node node-rsi" id="nodeRsi" style="top: 20%; left: 10%;">
+                        <i class="fas fa-chart-bar"></i> RSI
+                    </div>
+                    <div class="animated-node node-pe" id="nodePe" style="top: 50%; left: 5%;">
+                        <i class="fas fa-balance-scale"></i> P/E Ratio
+                    </div>
+                    <div class="animated-node node-macd" id="nodeMacd" style="top: 30%; right: 8%;">
+                        <i class="fas fa-wave-square"></i> MACD
+                    </div>
+                    
+                    <button class="execute-trade-btn-animated" id="executeTradeBtn">
+                        <i class="fas fa-play-circle"></i> Execute Trade
+                    </button>
+
+                    <div class="backtest-results-popup" id="backtestResultsPopup">
+                        <h4>Simulated Backtest Results</h4>
+                        <div class="result-metric">Net Profit: <span class="positive">+$1,250.75</span></div>
+                        <div class="result-metric">Win Rate: <span>72%</span></div>
+                        <div class="result-metric">Sharpe Ratio: <span>1.85</span></div>
+                        <div class="result-metric">Max Drawdown: <span class="negative">-5.2%</span></div>
+                        <div style="width: 80%; height: 60px; background: linear-gradient(to right, var(--bg-subtle-accent) 20%, var(--primary-accent) 80%); border-radius: 4px; margin-top:10px; opacity:0.7; display:flex; align-items:flex-end;">
+                            <div style="width:10%; height:40%; background: var(--primary-accent); margin:0 1%;"></div>
+                            <div style="width:10%; height:60%; background: var(--primary-accent); margin:0 1%;"></div>
+                            <div style="width:10%; height:30%; background: var(--secondary-accent); margin:0 1%;"></div>
+                            <div style="width:10%; height:70%; background: var(--primary-accent); margin:0 1%;"></div>
+                            <div style="width:10%; height:50%; background: var(--secondary-accent); margin:0 1%;"></div>
+                            <div style="width:10%; height:80%; background: var(--primary-accent); margin:0 1%;"></div>
+                            <div style="width:10%; height:45%; background: var(--primary-accent); margin:0 1%;"></div>
+                        </div>
+                        <button class="cta-button close-results-btn" id="closeResultsBtn">Close Results</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Algorithm Marketplace Section -->
+    <section class="marketplace" id="marketplace">
+        <div class="container">
+            <div class="section-header reveal-on-scroll">
+                <h2 class="section-title">Algorithm <span class="text-gradient">Marketplace</span></h2>
+                <p class="section-description">Discover and leverage proven trading strategies from our community. <strong>Got a winning strategy? Publish it here and let others rent it!</strong></p>
+            </div>
+            
+            <div class="algo-carousel reveal-on-scroll" style="transition-delay: 0.15s;">
+                <button class="algo-carousel-button prev" aria-label="Previous algorithm"><i class="fas fa-chevron-left"></i></button>
+                <div class="algo-carousel-inner">
+                    <div class="algo-carousel-track">
+                        <!-- Algorithm Card 1 -->
+                        <div class="algo-carousel-slide">
+                            <div class="algo-card">
+                                <div class="algo-header">
+                                    <div class="win-rate-container">
+                                        <div class="win-rate-label">Win Rate</div>
+                                        <div class="win-rate">78.5<span class="percentage">%</span></div>
+                                        <div class="profit-loss positive">5.24% PL</div>
+                                    </div>
+                                    <div class="algo-badges">
+                                        <span class="published-badge">Published</span>
+                                        <span class="favorite-icon" role="button" aria-label="Favorite this algorithm" data-favorited="false"><i class="far fa-heart"></i></span>
+                                    </div>
+                                </div>
+                                <div class="algo-content">
+                                    <h3 class="algo-title">Momentum Trader Plus</h3>
+                                    <p class="algo-description">Advanced momentum strategy with dynamic position sizing...<a href="#" class="read-more">Read More</a></p>
+                                    <div class="algo-owner">
+                                        <div class="owner-avatar">👨‍💼</div>
+                                        <div class="owner-info">
+                                            <div class="algo-date">12/03/2024</div>
+                                            <div class="owner-name">Owner:<br>AlgoTrader</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="algo-footer">
+                                    <button class="subscribed-btn">Subscribed</button>
+                                    <button class="action-btn" aria-label="Add to portfolio"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Algorithm Card 2 -->
+                        <div class="algo-carousel-slide">
+                            <div class="algo-card">
+                                <div class="algo-header">
+                                    <div class="win-rate-container">
+                                        <div class="win-rate-label">Win Rate</div>
+                                        <div class="win-rate">63.7<span class="percentage">%</span></div>
+                                        <div class="profit-loss positive">8.12% PL</div>
+                                    </div>
+                                    <div class="algo-badges">
+                                        <span class="published-badge">Published</span>
+                                        <span class="favorite-icon" role="button" aria-label="Favorite this algorithm" data-favorited="true"><i class="fas fa-heart"></i></span>
+                                    </div>
+                                </div>
+                                <div class="algo-content">
+                                    <h3 class="algo-title">Volatility Harvester</h3>
+                                    <p class="algo-description">Captures profit from market volatility using adaptive...<a href="#" class="read-more">Read More</a></p>
+                                    <div class="algo-owner">
+                                        <div class="owner-avatar">👨‍💻</div>
+                                        <div class="owner-info">
+                                            <div class="algo-date">18/04/2024</div>
+                                            <div class="owner-name">Owner:<br>VolTrader</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="algo-footer">
+                                    <button class="rent-btn">Rent: $4/m</button>
+                                    <button class="action-btn" aria-label="Add to portfolio"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Algorithm Card 3 -->
+                        <div class="algo-carousel-slide">
+                            <div class="algo-card">
+                                <div class="algo-header">
+                                    <div class="win-rate-container">
+                                        <div class="win-rate-label">Win Rate</div>
+                                        <div class="win-rate">82.3<span class="percentage">%</span></div>
+                                        <div class="profit-loss positive">3.76% PL</div>
+                                    </div>
+                                    <div class="algo-badges">
+                                        <span class="published-badge">Published</span>
+                                        <span class="favorite-icon" role="button" aria-label="Favorite this algorithm" data-favorited="false"><i class="far fa-heart"></i></span>
+                                    </div>
+                                </div>
+                                <div class="algo-content">
+                                    <h3 class="algo-title">Tech Sector Explorer</h3>
+                                    <p class="algo-description">Specialized algorithm targeting high-growth tech...<a href="#" class="read-more">Read More</a></p>
+                                    <div class="algo-owner">
+                                        <div class="owner-avatar">🧪</div>
+                                        <div class="owner-info">
+                                            <div class="algo-date">02/01/2025</div>
+                                            <div class="owner-name">Owner:<br>TechTrader</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="algo-footer">
+                                    <button class="rent-btn">Rent: $5/m</button>
+                                    <button class="action-btn" aria-label="Add to portfolio"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Algorithm Card 4 -->
+                        <div class="algo-carousel-slide">
+                            <div class="algo-card">
+                                <div class="algo-header">
+                                    <div class="win-rate-container">
+                                        <div class="win-rate-label">Win Rate</div>
+                                        <div class="win-rate">70.9<span class="percentage">%</span></div>
+                                        <div class="profit-loss positive">4.25% PL</div>
+                                    </div>
+                                    <div class="algo-badges">
+                                        <span class="published-badge">Published</span>
+                                        <span class="favorite-icon" role="button" aria-label="Favorite this algorithm" data-favorited="false"><i class="far fa-heart"></i></span>
+                                    </div>
+                                </div>
+                                <div class="algo-content">
+                                    <h3 class="algo-title">Multi-Signal Fusion</h3>
+                                    <p class="algo-description">Combines technical and fundamental indicators with...<a href="#" class="read-more">Read More</a></p>
+                                    <div class="algo-owner">
+                                        <div class="owner-avatar">👨‍🔬</div>
+                                        <div class="owner-info">
+                                            <div class="algo-date">04/09/2024</div>
+                                            <div class="owner-name">Owner:<br>SignalPro</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="algo-footer">
+                                    <button class="subscribed-btn">Subscribed</button>
+                                    <button class="action-btn" aria-label="Add to portfolio"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Algorithm Card 5 (New) -->
+                        <div class="algo-carousel-slide">
+                            <div class="algo-card">
+                                <div class="algo-header">
+                                    <div class="win-rate-container">
+                                        <div class="win-rate-label">Win Rate</div>
+                                        <div class="win-rate">66.2<span class="percentage">%</span></div>
+                                        <div class="profit-loss positive">2.95% PL</div>
+                                    </div>
+                                    <div class="algo-badges">
+                                        <span class="published-badge">Published</span>
+                                        <span class="favorite-icon" role="button" aria-label="Favorite this algorithm" data-favorited="false"><i class="far fa-heart"></i></span>
+                                    </div>
+                                </div>
+                                <div class="algo-content">
+                                    <h3 class="algo-title">Trend Rider Basic</h3>
+                                    <p class="algo-description">Simple trend-following strategy, good for beginners...<a href="#" class="read-more">Read More</a></p>
+                                    <div class="algo-owner">
+                                        <div class="owner-avatar">📈</div>
+                                        <div class="owner-info">
+                                            <div class="algo-date">15/05/2024</div>
+                                            <div class="owner-name">Owner:<br>NewTrader</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="algo-footer">
+                                    <button class="rent-btn">Rent: $2/m</button>
+                                    <button class="action-btn" aria-label="Add to portfolio"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Algorithm Card 6 (New) -->
+                        <div class="algo-carousel-slide">
+                            <div class="algo-card">
+                                <div class="algo-header">
+                                    <div class="win-rate-container">
+                                        <div class="win-rate-label">Win Rate</div>
+                                        <div class="win-rate">72.8<span class="percentage">%</span></div>
+                                        <div class="profit-loss positive">4.50% PL</div>
+                                    </div>
+                                    <div class="algo-badges">
+                                        <span class="published-badge">Published</span>
+                                        <span class="favorite-icon" role="button" aria-label="Favorite this algorithm" data-favorited="true"><i class="fas fa-heart"></i></span>
+                                    </div>
+                                </div>
+                                <div class="algo-content">
+                                    <h3 class="algo-title">Swing King Pro</h3>
+                                    <p class="algo-description">Advanced swing trading algorithm with risk management...<a href="#" class="read-more">Read More</a></p>
+                                    <div class="algo-owner">
+                                        <div class="owner-avatar">👑</div>
+                                        <div class="owner-info">
+                                            <div class="algo-date">01/06/2024</div>
+                                            <div class="owner-name">Owner:<br>SwingMaster</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="algo-footer">
+                                    <button class="rent-btn">Rent: $3/m</button>
+                                    <button class="action-btn" aria-label="Add to portfolio"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+                <button class="algo-carousel-button next" aria-label="Next algorithm"><i class="fas fa-chevron-right"></i></button>
+                <div class="algo-carousel-nav">
+                    <div class="algo-carousel-dots">
+                        <!-- Dots dynamically generated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta reveal-on-scroll">
+        <div class="container">
+            <h2 class="cta-title">Ready to Transform Your Trading?</h2>
+            <p class="cta-description">Join thousands of traders already using Tradefolio to build, test, and automate their strategies.</p>
+            <button class="cta-button white pulse-animation">Get Started Today</button>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="reveal-on-scroll">
+                    <a href="#" class="footer-logo">TRADEFOLIO</a>
+                    <p class="footer-description">Empowering traders with powerful, accessible algorithmic trading tools designed for everyone.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="reveal-on-scroll">
+                    <h3 class="footer-title">Company</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">About</a></li>
+                        <li class="footer-link"><a href="#">Careers</a></li>
+                        <li class="footer-link"><a href="#">Blog</a></li>
+                        <li class="footer-link"><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                
+                <div class="reveal-on-scroll">
+                    <h3 class="footer-title">Resources</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Documentation</a></li>
+                        <li class="footer-link"><a href="#">Help Center</a></li>
+                        <li class="footer-link"><a href="#">Community</a></li>
+                        <li class="footer-link"><a href="#">Webinars</a></li>
+                    </ul>
+                </div>
+                
+                <div class="reveal-on-scroll">
+                    <h3 class="footer-title">Legal</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Terms of Service</a></li>
+                        <li class="footer-link"><a href="#">Privacy Policy</a></li>
+                        <li class="footer-link"><a href="#">Security</a></li>
+                        <li class="footer-link"><a href="#">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom reveal-on-scroll">
+                <p>© 2025 Tradefolio. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sticky Header
+        const header = document.getElementById('header');
+        const headerHeight = header.offsetHeight; 
+
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 30) { 
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navLinks = document.getElementById('navLinks');
+        const body = document.body;
+        const mobileOnlyCTA = document.querySelector('.mobile-only-cta');
+
+        if (mobileMenuToggle && navLinks) {
+            mobileMenuToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('open');
+                mobileMenuToggle.classList.toggle('active');
+                body.classList.toggle('mobile-menu-open');
+                const isExpanded = navLinks.classList.contains('open');
+                mobileMenuToggle.setAttribute('aria-expanded', isExpanded);
+            });
+
+            navLinks.querySelectorAll('a, .mobile-only-cta').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navLinks.classList.contains('open')) {
+                        navLinks.classList.remove('open');
+                        mobileMenuToggle.classList.remove('active');
+                        body.classList.remove('mobile-menu-open');
+                        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+        }
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                }
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    let currentHeaderHeight = document.getElementById('header').offsetHeight;
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - currentHeaderHeight - 20, 
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Carousel functionality
+        function initCarousel() {
+            const carousel = document.querySelector('.algo-carousel');
+            if (!carousel) return;
+
+            const track = carousel.querySelector('.algo-carousel-track');
+            const slides = Array.from(carousel.querySelectorAll('.algo-carousel-slide'));
+            const nextButton = carousel.querySelector('.algo-carousel-button.next');
+            const prevButton = carousel.querySelector('.algo-carousel-button.prev');
+            const dotsContainer = carousel.querySelector('.algo-carousel-dots');
+            
+            if (!track || !slides.length || !nextButton || !prevButton || !dotsContainer) return;
+            
+            let currentIndex = 0;
+            let visibleSlides = getVisibleSlides();
+            const totalUniqueSlides = slides.length; 
+            let numPages = Math.ceil(totalUniqueSlides / visibleSlides);
+
+            function getVisibleSlides() {
+                if (window.innerWidth < 768) return 1;
+                if (window.innerWidth < 992) return 2; 
+                return 3;
+            }
+
+            function createDots() {
+                dotsContainer.innerHTML = '';
+                numPages = Math.ceil(totalUniqueSlides / visibleSlides);
+
+                if (numPages <= 1) {
+                    nextButton.style.display = 'none';
+                    prevButton.style.display = 'none';
+                    dotsContainer.style.display = 'none';
+                    return;
+                }
+                
+                nextButton.style.display = 'flex';
+                prevButton.style.display = 'flex';
+                dotsContainer.style.display = 'flex';
+
+                for (let i = 0; i < numPages; i++) {
+                    const dot = document.createElement('div');
+                    dot.classList.add('algo-carousel-dot');
+                    if (i === currentIndex) dot.classList.add('active');
+                    dot.addEventListener('click', () => {
+                        currentIndex = i;
+                        updateCarouselPosition();
+                    });
+                    dotsContainer.appendChild(dot);
+                }
+            }
+            
+            const updateCarouselPosition = () => {
+                const movePercentage = -currentIndex * 100;
+                track.style.transform = `translateX(${movePercentage}%)`;
+                
+                const dots = dotsContainer.querySelectorAll('.algo-carousel-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            };
+            
+            const handleResize = () => {
+                const newVisibleSlides = getVisibleSlides();
+                if (newVisibleSlides !== visibleSlides) {
+                    visibleSlides = newVisibleSlides;
+                    currentIndex = 0; 
+                    createDots(); 
+                    updateCarouselPosition();
+                }
+            };
+            
+            nextButton.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % numPages;
+                updateCarouselPosition();
+            });
+            
+            prevButton.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + numPages) % numPages;
+                updateCarouselPosition();
+            });
+            
+            window.addEventListener('resize', handleResize);
+            createDots(); 
+            updateCarouselPosition(); 
+        }
+
+        // Scroll Reveal Animations
+        function initScrollReveal() {
+            const revealElements = document.querySelectorAll('.reveal-on-scroll');
+            if (!revealElements.length) return;
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in-view');
+                    }
+                });
+            }, { threshold: 0.1 }); 
+
+            revealElements.forEach(el => observer.observe(el));
+        }
+
+        // Favorite Icon Toggle
+        function initFavoriteIcons() {
+            const favoriteIcons = document.querySelectorAll('.favorite-icon');
+            favoriteIcons.forEach(iconEl => {
+                const isFavorited = iconEl.dataset.favorited === 'true';
+                iconEl.classList.toggle('favorited', isFavorited);
+                iconEl.innerHTML = isFavorited ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+
+                iconEl.addEventListener('click', function() {
+                    const currentlyFavorited = this.classList.toggle('favorited');
+                    this.dataset.favorited = currentlyFavorited;
+                    this.innerHTML = currentlyFavorited ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+                    this.setAttribute('aria-label', currentlyFavorited ? 'Unfavorite this algorithm' : 'Favorite this algorithm');
+                });
+            });
+        }
+
+        // Algo Engine Animation
+        function initAlgoEngineAnimation() {
+            const executeBtn = document.getElementById('executeTradeBtn');
+            const resultsPopup = document.getElementById('backtestResultsPopup');
+            const closeResultsBtn = document.getElementById('closeResultsBtn');
+            const animatedVisual = document.getElementById('algoEngineAnimatedVisual');
+            const svgContainer = document.getElementById('connectorSvgContainer');
+
+            if (!executeBtn || !resultsPopup || !closeResultsBtn || !animatedVisual || !svgContainer) return;
+
+            const coreEl = animatedVisual.querySelector('.animated-core');
+            const nodeRsi = animatedVisual.querySelector('.node-rsi');
+            const nodePe = animatedVisual.querySelector('.node-pe');
+            const nodeMacd = animatedVisual.querySelector('.node-macd');
+            
+            const coreRect = coreEl.getBoundingClientRect();
+            const visualRect = animatedVisual.getBoundingClientRect();
+            const coreCenterX = coreEl.offsetLeft + coreEl.offsetWidth / 2;
+            const coreCenterY = coreEl.offsetTop + coreEl.offsetHeight / 2;
+
+            // Function to create and animate an SVG line
+            function createAnimatedLine(node, delay, idSuffix, targetX, targetY) {
+                const nodeRect = node.getBoundingClientRect();
+                const startX = node.offsetLeft + node.offsetWidth / 2;
+                const startY = node.offsetTop + node.offsetHeight / 2;
+                
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', startX);
+                line.setAttribute('y1', startY);
+                line.setAttribute('x2', targetX); // Target core center
+                line.setAttribute('y2', targetY);
+                line.classList.add('line-draw-animation');
+                if (idSuffix.includes('output')) {
+                    line.style.stroke = 'var(--secondary-accent)';
+                }
+                line.style.animationDelay = `${delay}s`;
+                
+                // Calculate length for dashoffset (for drawing effect)
+                const length = Math.sqrt(Math.pow(targetX - startX, 2) + Math.pow(targetY - startY, 2));
+                line.style.strokeDasharray = length;
+                line.style.strokeDashoffset = length;
+
+                svgContainer.appendChild(line);
+            }
+            
+            // Create lines after nodes are positioned and core is known
+            // This needs to happen after initial CSS positioning is applied.
+            // A small timeout or requestAnimationFrame can ensure elements are laid out.
+            requestAnimationFrame(() => {
+                // Adjust target points slightly to connect to edge of core, not dead center
+                const coreRadius = coreEl.offsetWidth / 2;
+                
+                createAnimatedLine(nodeRsi, 1.0, '1', coreCenterX - coreRadius * 0.707, coreCenterY - coreRadius * 0.707); // Top-left
+                createAnimatedLine(nodePe, 1.2, '2', coreCenterX - coreRadius, coreCenterY); // Mid-left
+                createAnimatedLine(nodeMacd, 1.4, '3', coreCenterX + coreRadius * 0.707, coreCenterY - coreRadius * 0.707); // Top-right
+                
+                // Line from core to button (approximate)
+                const btnRect = executeBtn.getBoundingClientRect();
+                const btnTopCenterX = executeBtn.offsetLeft + executeBtn.offsetWidth / 2;
+                const btnTopCenterY = executeBtn.offsetTop;
+
+                const outputLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                outputLine.setAttribute('x1', coreCenterX);
+                outputLine.setAttribute('y1', coreCenterY + coreRadius); // Start from bottom edge of core
+                outputLine.setAttribute('x2', btnTopCenterX);
+                outputLine.setAttribute('y2', btnTopCenterY);
+                outputLine.classList.add('line-draw-animation');
+                outputLine.style.stroke = 'var(--secondary-accent)';
+                outputLine.style.animationDelay = '1.8s';
+                const outputLength = Math.sqrt(Math.pow(btnTopCenterX - coreCenterX, 2) + Math.pow(btnTopCenterY - (coreCenterY + coreRadius), 2));
+                outputLine.style.strokeDasharray = outputLength;
+                outputLine.style.strokeDashoffset = outputLength;
+                svgContainer.appendChild(outputLine);
+            });
+
+
+            executeBtn.addEventListener('click', () => {
+                resultsPopup.classList.add('visible');
+            });
+
+            closeResultsBtn.addEventListener('click', () => {
+                resultsPopup.classList.remove('visible');
+            });
+        }
+        
+        window.addEventListener('load', function() {
+            initCarousel();
+            initScrollReveal();
+            initFavoriteIcons();
+            initAlgoEngineAnimation();
+        });
+    </script>
+</body>
+</html>
