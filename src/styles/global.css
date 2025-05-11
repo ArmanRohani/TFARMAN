@@ -1,0 +1,77 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif; /* Assuming Inter is globally linked in index.html */
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body.mobile-menu-open {
+    overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-accent);
+    transition: color 0.2s ease;
+}
+a:hover {
+    color: #0056b3;
+}
+
+/* ... other global utility classes or base element styles ... */
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem; 
+    position: relative;
+}
+
+section {
+    padding: 5rem 0; 
+    position: relative;
+    overflow: hidden; /* Important for some animations or absolutely positioned children */
+}
+
+section:nth-of-type(even) { 
+    background-color: var(--bg-alt);
+}
+
+.section-header { text-align: center; max-width: 750px; margin: 0 auto 4rem; }
+.section-title { margin-bottom: 1rem; } /* Example global section header style */
+.section-description { font-size: 1.1rem; color: var(--text-secondary); }
+
+/* Reveal on scroll (can be handled by a hook) */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal-on-scroll.animate-in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* Add more specific delays for children if needed here or in component CSS */
